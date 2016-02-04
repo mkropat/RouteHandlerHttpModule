@@ -44,11 +44,7 @@ namespace RouteHandlerHttpModule
         {
             try
             {
-                return MvcHandlerLocator.MvcHandlerLocator.Locate(context);
-            }
-            catch (MvcHandlerLocator.MvcHandlerNotFound ex)
-            {
-                throw new HandlerNotFound(ex);
+                return MvcHandlerLocator.Locate(context);
             }
             catch (FileNotFoundException ex) // Assembly load error
             {

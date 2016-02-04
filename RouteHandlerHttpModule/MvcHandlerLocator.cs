@@ -4,7 +4,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace RouteHandlerHttpModule.MvcHandlerLocator
+namespace RouteHandlerHttpModule
 {
     public static class MvcHandlerLocator
     {
@@ -17,7 +17,7 @@ namespace RouteHandlerHttpModule.MvcHandlerLocator
 
             var routeData = RouteTable.Routes.GetRouteData(httpContext);
             if (routeData == null)
-                throw new MvcHandlerNotFound("RouteData does not exist");
+                throw new HandlerNotFound("RouteData does not exist");
 
             var controller = GetController(httpContext, routeData);
             var controllerType = controller.GetType();
@@ -36,7 +36,7 @@ namespace RouteHandlerHttpModule.MvcHandlerLocator
         {
             var name = routeData.Values["controller"] as string;
             if (string.IsNullOrEmpty(name))
-                throw new MvcHandlerNotFound("controller missing from RouteData");
+                throw new HandlerNotFound("controller missing from RouteData");
 
             var requestContext = new RequestContext(context, routeData);
             var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
