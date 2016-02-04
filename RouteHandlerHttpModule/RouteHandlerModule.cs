@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Web;
 
 namespace RouteHandlerHttpModule
@@ -27,20 +26,8 @@ namespace RouteHandlerHttpModule
 
         static string GetHandler(HttpContext context)
         {
-            return TryLocateMvcHandler(context) ??
+            return MvcHandlerLocator.Locate(context) ??
                 FileHandlerLocator.Locate(context);
-        }
-
-        static string TryLocateMvcHandler(HttpContext context)
-        {
-            try
-            {
-                return MvcHandlerLocator.Locate(context);
-            }
-            catch (FileNotFoundException) // Assembly load error
-            {
-                return null;
-            }
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
@@ -12,6 +13,22 @@ namespace RouteHandlerHttpModule
         // http://stackoverflow.com/a/19382567/27581
 
         public static string Locate(HttpContext context)
+        {
+            try
+            {
+                return ActualLocate(context);
+            }
+            catch (FileLoadException) // Assembly load error
+            {
+                return null;
+            }
+            catch (FileNotFoundException) // Assembly load error
+            {
+                return null;
+            }
+        }
+
+        static string ActualLocate(HttpContext context)
         {
             var httpContext = new HttpContextWrapper(context);
 
