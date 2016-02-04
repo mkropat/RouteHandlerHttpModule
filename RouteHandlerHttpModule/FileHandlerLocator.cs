@@ -10,10 +10,9 @@ namespace RouteHandlerHttpModule
             var requestPath = context.Request.Url.AbsolutePath;
             var filePath = context.Request.MapPath(requestPath);
 
-            if (!File.Exists(filePath))
-                throw new HandlerNotFound("Not a file");
-
-            return filePath;
+            return File.Exists(filePath)
+                ? filePath
+                : null;
         }
     }
 }

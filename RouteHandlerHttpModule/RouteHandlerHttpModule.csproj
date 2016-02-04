@@ -75,7 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileHandlerLocator.cs" />
-    <Compile Include="HandlerNotFound.cs" />
     <Compile Include="MvcHandlerLocator.cs" />
     <Compile Include="RouteHandlerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

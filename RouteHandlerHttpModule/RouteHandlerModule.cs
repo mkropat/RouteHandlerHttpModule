@@ -17,27 +17,18 @@ namespace RouteHandlerHttpModule
 
         void OnRequest(object sender, EventArgs e)
         {
-            try
+            var handler = GetHandler(_context.Context);
+            if (handler != null)
             {
                 var headers = _context.Response.Headers;
                 headers.Add("X-Route-Handler", GetHandler(_context.Context));
-            }
-            catch (HandlerNotFound)
-            {
-                // oh well
             }
         }
 
         static string GetHandler(HttpContext context)
         {
-            try
-            {
-                return TryLocateMvcHandler(context);
-            }
-            catch (HandlerNotFound)
-            {
-                return FileHandlerLocator.Locate(context);
-            }
+            return TryLocateMvcHandler(context) ??
+                FileHandlerLocator.Locate(context);
         }
 
         static string TryLocateMvcHandler(HttpContext context)
@@ -46,9 +37,9 @@ namespace RouteHandlerHttpModule
             {
                 return MvcHandlerLocator.Locate(context);
             }
-            catch (FileNotFoundException ex) // Assembly load error
+            catch (FileNotFoundException) // Assembly load error
             {
-                throw new HandlerNotFound(ex);
+                return null;
             }
         }
 

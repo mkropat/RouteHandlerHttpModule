@@ -17,9 +17,12 @@ namespace RouteHandlerHttpModule
 
             var routeData = RouteTable.Routes.GetRouteData(httpContext);
             if (routeData == null)
-                throw new HandlerNotFound("RouteData does not exist");
+                return null;
 
             var controller = GetController(httpContext, routeData);
+            if (controller == null)
+                return null;
+
             var controllerType = controller.GetType();
             var assembly = controllerType.Assembly;
 
@@ -36,7 +39,7 @@ namespace RouteHandlerHttpModule
         {
             var name = routeData.Values["controller"] as string;
             if (string.IsNullOrEmpty(name))
-                throw new HandlerNotFound("controller missing from RouteData");
+                return null;
 
             var requestContext = new RequestContext(context, routeData);
             var controllerFactory = ControllerBuilder.Current.GetControllerFactory();
