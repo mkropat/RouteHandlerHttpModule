@@ -1,11 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Web;
 
 namespace RouteHandlerHttpModule
 {
     public class RouteHandlerModule : IHttpModule
     {
+        readonly MvcHandlerLocator _mvcHandlerLocator = new MvcHandlerLocator();
         HttpApplication _context;
 
         public void Init(HttpApplication context)
@@ -17,43 +17,18 @@ namespace RouteHandlerHttpModule
 
         void OnRequest(object sender, EventArgs e)
         {
-            try
+            var handler = GetHandler(_context.Context);
+            if (handler != null)
             {
                 var headers = _context.Response.Headers;
-                headers.Add("X-Route-Handler", GetHandler(_context.Context));
-            }
-            catch (HandlerNotFound)
-            {
-                // oh well
+                headers.Add("X-Route-Handler", handler);
             }
         }
 
-        static string GetHandler(HttpContext context)
+        string GetHandler(HttpContext context)
         {
-            try
-            {
-                return TryLocateMvcHandler(context);
-            }
-            catch (HandlerNotFound)
-            {
-                return FileHandlerLocator.Locate(context);
-            }
-        }
-
-        static string TryLocateMvcHandler(HttpContext context)
-        {
-            try
-            {
-                return MvcHandlerLocator.MvcHandlerLocator.Locate(context);
-            }
-            catch (MvcHandlerLocator.MvcHandlerNotFound ex)
-            {
-                throw new HandlerNotFound(ex);
-            }
-            catch (FileNotFoundException ex) // Assembly load error
-            {
-                throw new HandlerNotFound(ex);
-            }
+            return _mvcHandlerLocator.Locate(context) ??
+                FileHandlerLocator.Locate(context);
         }
 
         public void Dispose()

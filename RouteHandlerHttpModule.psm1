@@ -4,17 +4,11 @@ $ErrorActionPreference = 'Stop'
 $VerbosePreference = 'Continue'
 
 $moduleAssembly = Join-Path $PSScriptRoot 'RouteHandlerHttpModule.dll'
-$assemblies = @(
-    $moduleAssembly,
-    (Join-Path $PSScriptRoot 'RouteHandlerHttpModule.MvcHandlerLocator.dll')
-)
 
 function Install-RouteHandlerModule {
     $name = Get-AssemblyName $moduleAssembly
 
-    foreach ($asm in $assemblies) {
-        Install-Assembly $asm
-    }
+    Install-Assembly $moduleAssembly
 
     Install-IisConfigReference $name
     Install-UserIisExpressConfigReference $name
@@ -25,9 +19,7 @@ Export-ModuleMember 'Install-RouteHandlerModule'
 function Uninstall-RouteHandlerModule {
     Uninstall-UserIisExpressConfigReference
 
-    foreach ($asm in $assemblies) {
-        Uninstall-Assembly $asm
-    }
+    Uninstall-Assembly $moduleAssembly
  }
 
 Export-ModuleMember 'Uninstall-RouteHandlerModule'
