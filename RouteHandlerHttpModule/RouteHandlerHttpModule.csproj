@@ -98,8 +98,8 @@
   -->
   <Target Name="AfterBuild">
     <ItemGroup>
-      <ModuleFiles Include="$(ProjectDir)\..\*.psm1" />
+      <PowerShellFiles Include="$(ProjectDir)\..\Powershell\*.*" />
     </ItemGroup>
-    <Copy SourceFiles="@(ModuleFiles)" DestinationFolder="$(OutputPath)" />
+    <Copy SourceFiles="@(PowerShellFiles)" DestinationFolder="$(OutputPath)" />
   </Target>
 </Project>
