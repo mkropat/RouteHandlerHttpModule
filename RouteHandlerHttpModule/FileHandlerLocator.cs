@@ -3,7 +3,7 @@ using System.Web;
 
 namespace RouteHandlerHttpModule
 {
-    internal static class FileHandlerLocator
+    public static class FileHandlerLocator
     {
         public static string Locate(HttpContext context)
         {
