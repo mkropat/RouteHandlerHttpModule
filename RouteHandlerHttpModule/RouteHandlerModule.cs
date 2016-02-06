@@ -5,6 +5,7 @@ namespace RouteHandlerHttpModule
 {
     public class RouteHandlerModule : IHttpModule
     {
+        readonly MvcHandlerLocator _mvcHandlerLocator = new MvcHandlerLocator();
         HttpApplication _context;
 
         public void Init(HttpApplication context)
@@ -20,13 +21,13 @@ namespace RouteHandlerHttpModule
             if (handler != null)
             {
                 var headers = _context.Response.Headers;
-                headers.Add("X-Route-Handler", GetHandler(_context.Context));
+                headers.Add("X-Route-Handler", handler);
             }
         }
 
-        static string GetHandler(HttpContext context)
+        string GetHandler(HttpContext context)
         {
-            return MvcHandlerLocator.Locate(context) ??
+            return _mvcHandlerLocator.Locate(context) ??
                 FileHandlerLocator.Locate(context);
         }
 
