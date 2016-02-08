@@ -1,5 +1,7 @@
 # RouteHandlerHttpModule
 
+__Warning 2016/2/8: I've discovered this module has issues that cause Web API routing and some MVC pages to break. Until I figure out another way to implement the MVC controller locator logic, I do not recommend that anyone use this module.__
+
 *Find out what ASP.NET MVC controller or Web Forms page handled a given route*
 
 Have you ever worked on an application where you could hit a particular page,
